@@ -1,17 +1,18 @@
 [versions]
 agp = "8.11.1"
-kotlin = "2.0.21"
+kotlin = "2.2.0"
 coreKtx = "1.16.0"
 junit = "4.13.2"
 junitVersion = "1.2.1"
 espressoCore = "3.6.1"
 lifecycleRuntimeKtx = "2.9.1"
 activityCompose = "1.10.1"
-composeBom = "2024.09.00"
+composeBom = "2025.06.01"
 
 kotlinxCoroutinesAndroid = "1.10.2"
 hiltNavigationFragment = "1.2.0"
 hilt = "2.56.2"
+materialIconsExtended = "1.7.8"
 retrofit = "3.0.0"
 roomRuntime = "2.7.2"
 coilCompose = "3.2.0"
@@ -49,6 +50,7 @@ converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref
 coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coilCompose" }
 coil-network-okhttp = { module = "io.coil-kt.coil3:coil-network-okhttp", version.ref = "coilCompose" }
 androidx-hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hiltNavigationCompose" }
+androidx-material-icons-extended = { module = "androidx.compose.material:material-icons-extended", version.ref = "materialIconsExtended" }
 
 
 [plugins]

@@ -77,6 +77,9 @@ dependencies {
     implementation(libs.androidx.hilt.navigation.fragment)
     implementation(libs.androidx.hilt.navigation.compose)
 
+    //extended material
+    implementation(libs.androidx.material.icons.extended)
+
 
     //Retrofit
     implementation(libs.retrofit)
