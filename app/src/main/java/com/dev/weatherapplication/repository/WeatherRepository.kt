@@ -1,5 +1,6 @@
 package com.dev.weatherapplication.repository
 
+import android.util.Log
 import com.dev.weatherapplication.data.WeatherState
 import com.dev.weatherapplication.model.Weather
 import com.dev.weatherapplication.network.WeatherApi
@@ -12,7 +13,7 @@ class WeatherRepository @Inject constructor(private val weatherApi: WeatherApi) 
             if (response.isSuccessful) {
                 WeatherState.Success(response.body()!!)
             } else {
-                WeatherState.Failure(Exception("Failed to fetch weather data"))
+                WeatherState.Failure(Exception("Error: ${response.code()} ${response.message()}"))
             }
         } catch (e: Exception) {
             WeatherState.Failure(e)

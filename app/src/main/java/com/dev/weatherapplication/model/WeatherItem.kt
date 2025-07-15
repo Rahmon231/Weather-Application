@@ -1,6 +1,6 @@
 package com.dev.weatherapplication.model
 
-data class Item8(
+data class WeatherItem(
     val clouds: Clouds,
     val dt: Int,
     val dt_txt: String,
