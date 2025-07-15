@@ -18,5 +18,4 @@ class WeatherRepository @Inject constructor(private val weatherApi: WeatherApi) 
             WeatherState.Failure(e)
         }
     }
-
 }
