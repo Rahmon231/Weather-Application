@@ -48,6 +48,7 @@ import com.dev.weatherapplication.data.WeatherState
 import com.dev.weatherapplication.model.CurrentWeather
 import com.dev.weatherapplication.model.Weather
 import com.dev.weatherapplication.model.WeatherItem
+import com.dev.weatherapplication.navigation.WeatherScreens
 import com.dev.weatherapplication.utils.formatDate
 import com.dev.weatherapplication.utils.formatDateTime
 import com.dev.weatherapplication.utils.formatDecimals
@@ -100,7 +101,10 @@ fun MainScaffold(weather: Weather, currentWeather: CurrentWeather, navController
         WeatherAppBar(
             title = weather.city.name + ", ${weather.city.country}",
             icon = Icons.AutoMirrored.Filled.ArrowBack,
-            elevation = 100.dp){
+            elevation = 100.dp,
+            onAddActionClicked = {
+                navController.navigate(WeatherScreens.SearchScreen.name)
+            }){
             navController.popBackStack()
         }
     }) {
