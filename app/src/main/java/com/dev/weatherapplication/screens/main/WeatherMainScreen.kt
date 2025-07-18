@@ -1,11 +1,8 @@
 package com.dev.weatherapplication.screens.main
 
-import android.util.Log
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -13,15 +10,11 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.Divider
 import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
@@ -31,18 +24,12 @@ import androidx.compose.runtime.produceState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import coil3.compose.rememberAsyncImagePainter
-import com.dev.weatherapplication.R
 import com.dev.weatherapplication.data.CurrentWeatherState
 import com.dev.weatherapplication.data.WeatherState
 import com.dev.weatherapplication.model.CurrentWeather
@@ -50,7 +37,6 @@ import com.dev.weatherapplication.model.Weather
 import com.dev.weatherapplication.model.WeatherItem
 import com.dev.weatherapplication.navigation.WeatherScreens
 import com.dev.weatherapplication.utils.formatDate
-import com.dev.weatherapplication.utils.formatDateTime
 import com.dev.weatherapplication.utils.formatDecimals
 import com.dev.weatherapplication.widgets.HumidityWindPressureRow
 import com.dev.weatherapplication.widgets.SunsetSunriseRow
@@ -59,16 +45,19 @@ import com.dev.weatherapplication.widgets.WeatherDetailRow
 import com.dev.weatherapplication.widgets.WeatherStateImage
 
 @Composable
-fun WeatherMainScreen (navController: NavHostController,
-                       mainViewModel: MainViewModel = hiltViewModel()) {
+fun WeatherMainScreen (
+    navController: NavHostController,
+    mainViewModel: MainViewModel = hiltViewModel(),
+    city: String?
+) {
     val weatherData = produceState<WeatherState<Weather>>(
         initialValue = WeatherState.Loading) {
-        value = mainViewModel.getWeather("Derby")
+        value = mainViewModel.getWeather(city.toString())
     }.value
 
     val currentWeatherData = produceState<CurrentWeatherState<CurrentWeather>>(
         initialValue = CurrentWeatherState.Loading) {
-        value = mainViewModel.getCurrentWeather("Derby")
+        value = mainViewModel.getCurrentWeather(city.toString())
     }.value
 
     when {
@@ -100,12 +89,11 @@ fun MainScaffold(weather: Weather, currentWeather: CurrentWeather, navController
     Scaffold(topBar = {
         WeatherAppBar(
             title = weather.city.name + ", ${weather.city.country}",
-            icon = Icons.AutoMirrored.Filled.ArrowBack,
             elevation = 100.dp,
             onAddActionClicked = {
                 navController.navigate(WeatherScreens.SearchScreen.name)
             }){
-            navController.popBackStack()
+           //OnBackArrowClicked or favourite impl
         }
     }) {
         Surface(modifier = Modifier.padding(it)){
