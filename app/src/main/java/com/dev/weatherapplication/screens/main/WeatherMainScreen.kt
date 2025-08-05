@@ -29,6 +29,7 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import com.dev.weatherapplication.data.CurrentWeatherState
 import com.dev.weatherapplication.data.WeatherState
@@ -46,7 +47,7 @@ import com.dev.weatherapplication.widgets.WeatherStateImage
 
 @Composable
 fun WeatherMainScreen (
-    navController: NavHostController,
+    navController: NavController,
     mainViewModel: MainViewModel = hiltViewModel(),
     city: String?
 ) {
@@ -84,12 +85,13 @@ fun WeatherMainScreen (
 }
 
 @Composable
-fun MainScaffold(weather: Weather, currentWeather: CurrentWeather, navController: NavHostController) {
+fun MainScaffold(weather: Weather, currentWeather: CurrentWeather, navController: NavController) {
 
     Scaffold(topBar = {
         WeatherAppBar(
             title = weather.city.name + ", ${weather.city.country}",
             elevation = 100.dp,
+            navController =  navController,
             onAddActionClicked = {
                 navController.navigate(WeatherScreens.SearchScreen.name)
             }){
