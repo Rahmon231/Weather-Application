@@ -34,6 +34,7 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -108,21 +109,64 @@ fun WeatherAppBar(
                 }
             }
             if (isMainScreen) {
-                Icon(
-                    imageVector = Icons.Default.Favorite,
-                    contentDescription = "Favorite Icon",
-                    modifier = Modifier.scale(0.9f)
-                        .clickable {
-                            favoriteViewmodel.insertFavorite(
-                                Favorite(
-                                    city = title.split(",")[0],
-                                    country = title.split(",")[1]
+                val currentCity = title.split(",")[0].trim()
+                val currentCountry = title.split(",")[1].trim()
+                val context = LocalContext.current
 
-                                )
-                            )
-                        },
-                    tint = Color.Red.copy(alpha = 0.6f)
-                )
+                val isAlreadyFavList = favoriteViewmodel
+                    .favList.collectAsState().value.filter { item ->
+                        item.city == title.split(",")[0]
+                    }
+                val isFavorited = isAlreadyFavList.any {
+                    it.city == currentCity && it.country == currentCountry
+                }
+
+                if (isFavorited) {
+                    Icon(
+                        imageVector = Icons.Default.Favorite,
+                        contentDescription = "Unfavorite Icon",
+                        tint = Color.Red.copy(alpha = 0.6f),
+                        modifier = Modifier
+                            .scale(0.9f)
+                            .clickable {
+                                favoriteViewmodel.deleteFavorite(
+                                    Favorite(
+                                        city = currentCity,
+                                        country = currentCountry
+                                    )
+
+                                ).run {
+                                    Toast
+                                        .makeText(context, "Removed from Favorites", Toast.LENGTH_SHORT)
+                                        .show()
+                                }
+
+                            }
+                    )
+                } else {
+                    Icon(
+                        imageVector = Icons.Default.FavoriteBorder,
+                        contentDescription = "Favorite Icon",
+                        modifier = Modifier
+                            .scale(0.9f)
+                            .clickable {
+                                favoriteViewmodel.insertFavorite(
+                                    Favorite(
+                                        city = currentCity,
+                                        country = currentCountry
+                                    )
+                                ).run {
+                                    Toast
+                                        .makeText(context, "Added to Favorites", Toast.LENGTH_SHORT)
+                                        .show()
+                                }
+
+
+                            }
+                    )
+                }
+
+
             }
         },
         actions = {
