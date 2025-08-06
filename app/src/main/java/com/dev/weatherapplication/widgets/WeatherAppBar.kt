@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Search
@@ -39,6 +40,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
@@ -49,12 +51,15 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
+import com.dev.weatherapplication.model.Favorite
 import com.dev.weatherapplication.navigation.WeatherScreens
+import com.dev.weatherapplication.screens.favourites.FavoriteViewmodel
 import kotlin.math.log
 
-@Preview
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun WeatherAppBar(
@@ -63,6 +68,7 @@ fun WeatherAppBar(
     isMainScreen: Boolean = true,
     elevation: Dp = 0.dp,
     navController : NavController,
+    favoriteViewmodel: FavoriteViewmodel = hiltViewModel(),
     onAddActionClicked: () -> Unit = {},
     onButtonClicked: () -> Unit = {}
 ) {
@@ -100,6 +106,23 @@ fun WeatherAppBar(
                         tint = MaterialTheme.colorScheme.secondary
                     )
                 }
+            }
+            if (isMainScreen) {
+                Icon(
+                    imageVector = Icons.Default.Favorite,
+                    contentDescription = "Favorite Icon",
+                    modifier = Modifier.scale(0.9f)
+                        .clickable {
+                            favoriteViewmodel.insertFavorite(
+                                Favorite(
+                                    city = title.split(",")[0],
+                                    country = title.split(",")[1]
+
+                                )
+                            )
+                        },
+                    tint = Color.Red.copy(alpha = 0.6f)
+                )
             }
         },
         actions = {

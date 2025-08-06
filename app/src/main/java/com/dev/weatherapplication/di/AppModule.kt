@@ -10,6 +10,7 @@ import com.dev.weatherapplication.utils.Constants.BASE_URL
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -26,7 +27,7 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideAppDatabase(context: Context) : WeatherDatabase
+    fun provideAppDatabase(@ApplicationContext context: Context) : WeatherDatabase
     = Room.databaseBuilder(
         context,
         WeatherDatabase::class.java,
