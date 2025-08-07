@@ -6,9 +6,12 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.IconToggleButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
@@ -20,11 +23,13 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.dev.weatherapplication.model.Unit
@@ -37,8 +42,10 @@ fun WeatherSettingsScreen(navController: NavHostController,
     var unitToggleState by remember { mutableStateOf(false) }
     val measurementUnits = listOf("Imperial (F)", "Metric (C)")
     val choiceFromDb = settingsViewModel.unitList.collectAsState().value
-    val defaultChoice = if (choiceFromDb.isEmpty()) measurementUnits[0]
-    else choiceFromDb[0].unit
+    val defaultChoice =
+        if (choiceFromDb.isEmpty()) measurementUnits[0]
+        else choiceFromDb[0].unit
+
     var choiceState by remember {
         mutableStateOf(defaultChoice)
     }
@@ -57,7 +64,7 @@ fun WeatherSettingsScreen(navController: NavHostController,
         Surface(modifier = Modifier.padding(it).fillMaxSize()) {
             Column(
                 verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally
+                horizontalAlignment = CenterHorizontally
             ) {
                 Text(text = "Change Unit of Measurement",
                     modifier = Modifier.padding(bottom = 15.dp))
@@ -66,14 +73,10 @@ fun WeatherSettingsScreen(navController: NavHostController,
                     checked = !unitToggleState,
                     onCheckedChange = { toggleState->
                         unitToggleState = !toggleState
-                        if (unitToggleState){
-                            //imperial
-                            settingsViewModel.deleteAllUnits()
-                            settingsViewModel.insertUnit(Unit("imperial"))
+                        choiceState = if (unitToggleState){
+                            "Imperial (F)"
                         }else{
-                            //metric
-                            settingsViewModel.deleteAllUnits()
-                            settingsViewModel.insertUnit(Unit("metric"))
+                            "Metric (C)"
                         }
                     },
                     modifier = Modifier.fillMaxWidth(0.5f)
@@ -83,7 +86,24 @@ fun WeatherSettingsScreen(navController: NavHostController,
                     Text(text = if (unitToggleState) "Fahrenheit ºF" else "Celsius ºC")
 
                 }
+                Button(
+                    onClick = {
+                        settingsViewModel.deleteAllUnits()
+                        settingsViewModel.insertUnit(Unit(choiceState))
+                    },
+                    modifier = Modifier.padding(3.dp).align(CenterHorizontally),
+                    shape = RoundedCornerShape(34.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Color(0xFFEFBE42)
+                    )
+                ) {
+                    Text(text = "Save",
+                        modifier = Modifier.padding(4.dp),
+                        color = Color.White,
+                        fontSize = 17.sp)
+                }
             }
+
     }
     }
 }
