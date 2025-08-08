@@ -138,7 +138,7 @@ fun HumidityWindPressureRow(weather: WeatherItem, isImperial: Boolean) {
                 contentDescription = "wind icon",
                 modifier = Modifier.size(20.dp)
             )
-            Text(text = "${weather.wind.speed} "+ if (isImperial) "mph" else "m/s",
+            Text(text = "${formatDecimals(weather.wind.speed)} "+ if (isImperial) "mph" else "m/s",
                 style = MaterialTheme.typography.labelSmall)
         }
 
