@@ -13,6 +13,7 @@ import com.dev.weatherapplication.screens.favourites.WeatherFavouriteScreen
 import com.dev.weatherapplication.screens.main.MainViewModel
 import com.dev.weatherapplication.screens.main.WeatherMainScreen
 import com.dev.weatherapplication.screens.search.WeatherSearchScreen
+import com.dev.weatherapplication.screens.settings.SettingsViewModel
 import com.dev.weatherapplication.screens.settings.WeatherSettingsScreen
 import com.dev.weatherapplication.screens.splash.WeatherSplashScreen
 
@@ -31,10 +32,12 @@ fun WeatherNavigation() {
         ){navBack ->
             navBack.arguments?.getString("city").let { city ->
                 val mainViewModel = hiltViewModel<MainViewModel>()
+                val settingsViewModel = hiltViewModel<SettingsViewModel>()
                 WeatherMainScreen(
                     navController = navController,
                     mainViewModel = mainViewModel,
-                    city = city)
+                    city = city,
+                    settingsViewModel = settingsViewModel)
 
             }
 

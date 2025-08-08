@@ -1,5 +1,6 @@
 package com.dev.weatherapplication.screens.main
 
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -11,8 +12,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
@@ -20,7 +19,12 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -30,13 +34,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import androidx.navigation.NavHostController
 import com.dev.weatherapplication.data.CurrentWeatherState
 import com.dev.weatherapplication.data.WeatherState
 import com.dev.weatherapplication.model.CurrentWeather
 import com.dev.weatherapplication.model.Weather
 import com.dev.weatherapplication.model.WeatherItem
 import com.dev.weatherapplication.navigation.WeatherScreens
+import com.dev.weatherapplication.screens.settings.SettingsViewModel
 import com.dev.weatherapplication.utils.formatDate
 import com.dev.weatherapplication.utils.formatDecimals
 import com.dev.weatherapplication.widgets.HumidityWindPressureRow
@@ -49,43 +53,69 @@ import com.dev.weatherapplication.widgets.WeatherStateImage
 fun WeatherMainScreen (
     navController: NavController,
     mainViewModel: MainViewModel = hiltViewModel(),
-    city: String?
+    city: String?,
+    settingsViewModel: SettingsViewModel = hiltViewModel()
 ) {
-    val weatherData = produceState<WeatherState<Weather>>(
-        initialValue = WeatherState.Loading) {
-        value = mainViewModel.getWeather(city.toString())
-    }.value
 
-    val currentWeatherData = produceState<CurrentWeatherState<CurrentWeather>>(
-        initialValue = CurrentWeatherState.Loading) {
-        value = mainViewModel.getCurrentWeather(city.toString())
-    }.value
+    val unitFromDb = settingsViewModel.unitList.collectAsState().value
 
-    when {
-        weatherData is WeatherState.Loading || currentWeatherData is CurrentWeatherState.Loading -> {
-            CircularProgressIndicator()
-        }
+    var unit by remember {
+        mutableStateOf("imperial")
+    }
+    var isImperial by remember {
+        mutableStateOf(false)
+    }
 
-        weatherData is WeatherState.Failure -> {
-            Text("Forecast failed: ${weatherData.throwable.localizedMessage}")
-        }
 
-        currentWeatherData is CurrentWeatherState.Failure -> {
-            Text("Current weather failed: ${currentWeatherData.throwable.localizedMessage}")
-        }
+    if (unitFromDb.isNotEmpty()){
+        unit = unitFromDb[0].unit.split(" ")[0].lowercase()
 
-        weatherData is WeatherState.Success && currentWeatherData is CurrentWeatherState.Success -> {
-            MainScaffold(
-                weather = weatherData.data,
-                currentWeather = currentWeatherData.data,
-                navController = navController)
+        isImperial = unit == "imperial"
+        Log.d("MainScreenUnit", "WeatherMainScreen: $unit")
+        val weatherData = produceState<WeatherState<Weather>>(
+            initialValue = WeatherState.Loading) {
+            value = mainViewModel.getWeather(city.toString(), units = unit)
+        }.value
+
+        val currentWeatherData = produceState<CurrentWeatherState<CurrentWeather>>(
+            initialValue = CurrentWeatherState.Loading) {
+            value = mainViewModel.getCurrentWeather(city.toString(), units = unit)
+        }.value
+
+        when {
+            weatherData is WeatherState.Loading || currentWeatherData is CurrentWeatherState.Loading -> {
+                CircularProgressIndicator()
+            }
+
+            weatherData is WeatherState.Failure -> {
+                Text("Forecast failed: ${weatherData.throwable.localizedMessage}")
+            }
+
+            currentWeatherData is CurrentWeatherState.Failure -> {
+                Text("Current weather failed: ${currentWeatherData.throwable.localizedMessage}")
+            }
+
+            weatherData is WeatherState.Success && currentWeatherData is CurrentWeatherState.Success -> {
+                MainScaffold(
+                    weather = weatherData.data,
+                    currentWeather = currentWeatherData.data,
+                    navController = navController,
+                    isImperial = isImperial)
+            }
         }
     }
+
+
 
 }
 
 @Composable
-fun MainScaffold(weather: Weather, currentWeather: CurrentWeather, navController: NavController) {
+fun MainScaffold(
+    weather: Weather,
+    currentWeather: CurrentWeather,
+    navController: NavController,
+    isImperial: Boolean
+) {
 
     Scaffold(topBar = {
         WeatherAppBar(
@@ -99,7 +129,7 @@ fun MainScaffold(weather: Weather, currentWeather: CurrentWeather, navController
         }
     }) {
         Surface(modifier = Modifier.padding(it)){
-            MainContent(data = weather, currentData = currentWeather)
+            MainContent(data = weather, currentData = currentWeather, isImperial = isImperial)
         }
 
     }
@@ -107,7 +137,7 @@ fun MainScaffold(weather: Weather, currentWeather: CurrentWeather, navController
 }
 
 @Composable
-fun MainContent(data: Weather, currentData : CurrentWeather) {
+fun MainContent(data: Weather, currentData: CurrentWeather, isImperial: Boolean) {
     Column(
         modifier = Modifier
             .padding(4.dp)
@@ -146,7 +176,7 @@ fun MainContent(data: Weather, currentData : CurrentWeather) {
                     style = TextStyle(fontStyle = FontStyle.Italic))
             }
         }
-        HumidityWindPressureRow(weather = data.list[0])
+        HumidityWindPressureRow(weather = data.list[0], isImperial = isImperial)
         HorizontalDivider()
         SunsetSunriseRow(currentWeather = currentData)
         Text(text = "This Week",

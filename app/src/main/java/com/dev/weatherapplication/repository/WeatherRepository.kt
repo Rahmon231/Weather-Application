@@ -1,6 +1,5 @@
 package com.dev.weatherapplication.repository
 
-import android.util.Log
 import com.dev.weatherapplication.data.CurrentWeatherState
 import com.dev.weatherapplication.data.WeatherState
 import com.dev.weatherapplication.model.CurrentWeather
@@ -13,9 +12,9 @@ class WeatherRepository @Inject constructor(
     private val weatherApi: WeatherApi,
     private val currentWeatherApi: CurrentWeatherApi
 ) {
-    suspend fun getWeather(query: String) : WeatherState<Weather>{
+    suspend fun getWeather(query: String, units: String) : WeatherState<Weather>{
         return try {
-            val response = weatherApi.getWeather(query)
+            val response = weatherApi.getWeather(query, units = units)
             if (response.isSuccessful) {
                 WeatherState.Success(response.body()!!)
             } else {
@@ -25,9 +24,9 @@ class WeatherRepository @Inject constructor(
             WeatherState.Failure(e)
         }
     }
-    suspend fun getCurrentWeather(query: String) : CurrentWeatherState<CurrentWeather>{
+    suspend fun getCurrentWeather(query: String,units : String ) : CurrentWeatherState<CurrentWeather>{
         return try {
-            val response = currentWeatherApi.getCurrentWeather(query)
+            val response = currentWeatherApi.getCurrentWeather(query, units = units )
             if (response.isSuccessful) {
                 CurrentWeatherState.Success(response.body()!!)
             } else {
