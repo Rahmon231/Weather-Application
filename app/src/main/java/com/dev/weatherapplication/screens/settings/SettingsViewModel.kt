@@ -25,8 +25,10 @@ class SettingsViewModel @Inject constructor(private val repository: WeatherDbRep
             repository.getUnits().distinctUntilChanged()
                 .collect { listOfUnits ->
                     if (listOfUnits.isEmpty()){
-                        _unitList.value = emptyList()
-                        Log.d("UnitList", ": emptyList")
+                        val defaultUnit = Unit(unit = "imperial")
+                        repository.insertUnit(defaultUnit)
+                        _unitList.value = listOf(defaultUnit)
+                        Log.d("UnitList", ": inserted default imperial")
                     }else{
                         _unitList.value = listOfUnits
                         Log.d("UnitList", ": ${unitList.value}")

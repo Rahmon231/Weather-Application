@@ -66,6 +66,7 @@ fun WeatherMainScreen (
         mutableStateOf(false)
     }
 
+    Log.d("MainScreen Test", "WeatherMainScreen: ${unitFromDb.toString()}")
 
     if (unitFromDb.isNotEmpty()){
         unit = unitFromDb[0].unit.split(" ")[0].lowercase()
@@ -77,6 +78,7 @@ fun WeatherMainScreen (
             value = mainViewModel.getWeather(city.toString(), units = unit)
         }.value
 
+        Log.d("MainScreen Test", "WeatherMainScreen: ${weatherData.toString()}")
         val currentWeatherData = produceState<CurrentWeatherState<CurrentWeather>>(
             initialValue = CurrentWeatherState.Loading) {
             value = mainViewModel.getCurrentWeather(city.toString(), units = unit)
@@ -96,6 +98,7 @@ fun WeatherMainScreen (
             }
 
             weatherData is WeatherState.Success && currentWeatherData is CurrentWeatherState.Success -> {
+                Log.d("MainScreen Test", "WeatherMainScreen: ${currentWeatherData.data.name}")
                 MainScaffold(
                     weather = weatherData.data,
                     currentWeather = currentWeatherData.data,
