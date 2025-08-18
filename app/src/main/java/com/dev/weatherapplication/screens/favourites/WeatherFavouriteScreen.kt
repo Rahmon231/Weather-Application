@@ -17,6 +17,7 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.rounded.Delete
+import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -72,7 +73,7 @@ fun CityRow(
     navController: NavController,
     favoriteViewmodel: FavoriteViewmodel
 ) {
-    androidx.compose.material3.Card(
+    Card(
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 12.dp, vertical = 6.dp)
@@ -80,9 +81,9 @@ fun CityRow(
                 navController.navigate(WeatherScreens.MainScreen.name + "/${favorite.city}")
             },
         shape = RoundedCornerShape(16.dp),
-        elevation = androidx.compose.material3.CardDefaults.cardElevation(6.dp),
+        elevation = androidx.compose.material3.CardDefaults.cardElevation(4.dp),
         colors = androidx.compose.material3.CardDefaults.cardColors(
-            containerColor = Color(0xFFE0F2F1)
+            containerColor = Color(0xFFEEF1EF) // same soft neutral background used in main screen
         )
     ) {
         Row(
@@ -96,14 +97,14 @@ fun CityRow(
                 Text(
                     text = favorite.city,
                     style = MaterialTheme.typography.titleMedium.copy(
-                        color = Color(0xFF00796B),
+                        color = MaterialTheme.colorScheme.primary, // consistent with app bar/title color
                         fontWeight = FontWeight.SemiBold
                     )
                 )
                 Text(
                     text = favorite.country,
                     style = MaterialTheme.typography.bodySmall.copy(
-                        color = Color(0xFF004D40)
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 )
             }
@@ -114,9 +115,10 @@ fun CityRow(
                 modifier = Modifier
                     .clickable { favoriteViewmodel.deleteFavorite(favorite) }
                     .padding(8.dp),
-                tint = Color(0xFFD32F2F)
+                tint = Color(0xFFD32F2F) // consistent delete/red color
             )
         }
     }
 }
+
 
