@@ -27,6 +27,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
@@ -71,33 +72,51 @@ fun CityRow(
     navController: NavController,
     favoriteViewmodel: FavoriteViewmodel
 ) {
-   Surface(
-       modifier = Modifier.padding(3.dp).fillMaxWidth().height(50.dp)
-           .clickable {
-               navController.navigate(WeatherScreens.MainScreen.name + "/${favorite.city}")
-           },
-       shape = CircleShape.copy(topEnd = CornerSize(6.dp)),
-       color = Color(0xFFB2DFDB)
-       ) {
-       Row(modifier = Modifier.fillMaxWidth(),
-           verticalAlignment = Alignment.CenterVertically,
-           horizontalArrangement = Arrangement.SpaceEvenly) {
-           Text(text = favorite.city, modifier = Modifier.padding(start = 4.dp))
-           Surface(modifier = Modifier.padding(0.dp),
-               shape = CircleShape,
-               color = Color(0xFFD1E3E1))  {
-               Text(text = favorite.country,
-                   modifier = Modifier.padding(4.dp),
-                   style = MaterialTheme.typography.labelMedium)
-           }
-           Icon(imageVector = Icons.Rounded.Delete,
-               contentDescription = "delete",
-               modifier = Modifier.clickable {
-                   favoriteViewmodel.deleteFavorite(favorite)
-               },
-               tint = Color.Red.copy(alpha = 0.3f)
-           )
+    androidx.compose.material3.Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 12.dp, vertical = 6.dp)
+            .clickable {
+                navController.navigate(WeatherScreens.MainScreen.name + "/${favorite.city}")
+            },
+        shape = RoundedCornerShape(16.dp),
+        elevation = androidx.compose.material3.CardDefaults.cardElevation(6.dp),
+        colors = androidx.compose.material3.CardDefaults.cardColors(
+            containerColor = Color(0xFFE0F2F1)
+        )
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp, vertical = 12.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Column {
+                Text(
+                    text = favorite.city,
+                    style = MaterialTheme.typography.titleMedium.copy(
+                        color = Color(0xFF00796B),
+                        fontWeight = FontWeight.SemiBold
+                    )
+                )
+                Text(
+                    text = favorite.country,
+                    style = MaterialTheme.typography.bodySmall.copy(
+                        color = Color(0xFF004D40)
+                    )
+                )
+            }
 
-       }
-   }
+            Icon(
+                imageVector = Icons.Rounded.Delete,
+                contentDescription = "Delete Favorite",
+                modifier = Modifier
+                    .clickable { favoriteViewmodel.deleteFavorite(favorite) }
+                    .padding(8.dp),
+                tint = Color(0xFFD32F2F)
+            )
+        }
+    }
 }
+
