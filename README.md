@@ -1,67 +1,11 @@
-## 🌦 Weather Application
+# 🌦️ Find the Sun? - Weather Application
 
-A modern Android weather app built with Jetpack Compose and Hilt, providing real-time weather updates, weekly forecasts, and favorite cities management.
+Your daily weather companion built with **Jetpack Compose**.  
+Get current conditions, weekly forecasts, and manage your favorite cities with a modern, clean UI.
 
-## ✨ Features
+---
 
-📍 Search for Cities — Find current weather details by city name.
-
-🌡 Current Weather — View real-time temperature, condition, and details such as humidity, wind, and pressure.
-
-🌅 Sunrise & Sunset Times — Know when the day begins and ends.
-
-📅 7-Day Forecast — Beautifully designed weekly forecast with temperatures and weather icons.
-
-⭐ Favorite Cities — Save cities you care about and quickly access their weather.
-
-⚙️ Unit Preferences — Switch between Imperial (°F, mph) and Metric (°C, m/s) units.
-
-🎨 Modern UI — Built entirely with Jetpack Compose, using Material 3 design principles.
-
-## 🛠 Tech Stack
-
--Kotlin
-
--Jetpack Compose (UI)
-
--Material 3 (Design system)
-
--Hilt (Dependency Injection)
-
--Navigation Component (Compose)
-
--Retrofit (Networking)
-
--OpenWeatherMap API (Weather data)
-
--Room Database (Local persistence for favorites & settings)
-
-
-## 📂 Project Structure
-
-
-data/ – Repository layer & API service classes
-
-model/ – Data models (Weather, Forecast, etc.)
-
-navigation/ – Navigation graph for Compose destinations
-
-screens/ – All UI screens
-
-main/ – Home screen (current & weekly forecast)
-
--favourites/ – Favorite cities screen
-
--search/ – Search cities screen
-
--settings/ – Settings screen (unit preferences)
-
-utils/ – Utility functions (date/temperature formatting, constants)
-
-widgets/ – Reusable UI components (AppBar, Weather rows, cards, etc.)
-
-
-## 📸 Screenshots  
+## 📸 Screenshots
 
 <p align="center">
   <img src="https://github.com/user-attachments/assets/641f4feb-ab8c-4de4-8192-d25386374108" width="250" />
@@ -73,12 +17,51 @@ widgets/ – Reusable UI components (AppBar, Weather rows, cards, etc.)
   <img src="https://github.com/user-attachments/assets/cf876864-ac68-446d-afde-da8c023e5b19" width="250" />
   <img src="https://github.com/user-attachments/assets/49ed9463-5020-4bdf-a127-98da1dcb976b" width="250" />
   <img src="https://github.com/user-attachments/assets/02cfd49b-d695-47b6-8f18-2b904088263d" width="250" />
-</p>
-
-<p align="center">
   <img src="https://github.com/user-attachments/assets/f9cfd40b-9929-4644-94d7-38cef5ca7cbd" width="250" />
 </p>
 
+---
+
+## ✨ Features
+
+- 🌍 Search and view weather by city  
+- 📅 7-day weekly forecast  
+- ⭐ Save & manage favorite cities  
+- ⚙️ Switch between **Imperial** and **Metric** units  
+- 🎨 Modern UI with **dark & light theme support**  
+- 🚀 Built entirely with **Jetpack Compose**
+
+---
+
+## 🛠️ Tech Stack
+
+- **Kotlin** – Primary language  
+- **Jetpack Compose** – Declarative UI  
+- **Hilt** – Dependency injection  
+- **Room** – Local database for favorites  
+- **Retrofit** – API calls  
+- **Material3** – Theming & UI components  
+
+---
+
+## 📂 Project Structure
+
+- data/ – Repository & API services
+- model/ – Data models
+- navigation/ – Navigation graph
+- screens/ – Main, Favourites, Search, Settings, About, Splash
+- utils/ – Formatters, constants, helpers
+- widgets/ – Reusable Compose components
 
 
+---
+
+## 🚀 Getting Started
+
+1. Clone the repository  
+   ```bash
+   https://github.com/Rahmon231/Weather-Application
+2. Open in Android Studio
+3. Add your API key in local.properties or a constants file
+4. Run the app
 
